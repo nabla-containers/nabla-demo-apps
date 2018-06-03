@@ -25,8 +25,7 @@ function on_init()
 end
 
 function on_capture_start()
-	chisel.set_interval_ns(500000000)
-	--chisel.set_interval_ns(1000000000)
+	chisel.set_interval_ns(1000000000)
 	return true
 end
 

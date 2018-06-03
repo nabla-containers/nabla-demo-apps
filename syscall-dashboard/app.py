@@ -1,10 +1,8 @@
 from tornado import websocket, web, ioloop
-import pexpect
 import subprocess
 import json
 import os
 import signal
-from pexpect.popen_spawn import PopenSpawn
 
 cl = []
 
@@ -21,17 +19,13 @@ class SocketHandler(websocket.WebSocketHandler):
 
     def open(self):
         if self not in cl:
-            cmd_dashNabla = "stdbuf --output=0 sysdig proc.pid=29676 -c countsc | python dash_histo.py --port 8050"
+            cmd_dashNabla = "python dash_histo.py --port 8050 --pid ukvm-bin"
+            ps_nabla = subprocess.Popen(cmd_dashNabla, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
+            while ps_nabla.stderr.readline() == '': pass
 
-
-            ps_nabla = pexpect.spawn('/bin/bash', ['-c', cmd_dashNabla], timeout=None)
-            fout = open('mylog.txt','wb')
-            ps_nabla.logfile = fout
-            ps_nabla.expect("Running on http")
-
-            cmd_dashProc = "stdbuf --output=0 sysdig proc.name=node -c countsc | python dash_histo.py --port 8051"
-            ps_proc = pexpect.spawn('/bin/bash', ['-c', cmd_dashProc], timeout=None)
-            ps_proc.expect("Running on http")
+            cmd_dashProc = "python dash_histo.py --port 8051 --pid node"
+            ps_proc = subprocess.Popen(cmd_dashProc, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, preexec_fn=os.setsid)
+            while ps_proc.stderr.readline() == '': pass
 
             data = {
                 'replNabla':'http://172.17.0.2:8081/',

@@ -16,6 +16,8 @@ import time
 import operator
 import argparse
 import logging
+import subprocess
+import os
 
 from dash.dependencies import Input, Output
 
@@ -49,8 +51,17 @@ def update_metrics(n):
 
 p = re.compile(r'fd=([0-9]+)')
 
-def update_bins():
-    fifo = sys.stdin
+proc = None
+
+def __update_bins(pid):
+    global proc
+
+    #cmd_dashNabla = "stdbuf --output=0 --input=0 sysdig proc.pid=%d -c countsc" % pid
+    cmd_dashNabla = "stdbuf --output=0 --input=0 sysdig proc.name=%s -c countsc" % pid
+    #cmd_dashNabla = "stdbuf --output=0 sysdig proc.name=ukvm-bin -c countsc"
+    proc = subprocess.Popen(cmd_dashNabla, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env={'PYTHONUNBUFFERED': '1'})
+
+    fifo = proc.stdout
     while True:
         try:
             line = fifo.readline()
@@ -64,8 +75,15 @@ def update_bins():
         except (ValueError, KeyError):
             pass
         except IOError:
+            os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
             sys.exit(0)
 
+def update_bins(pid):
+    global proc
+    try:
+	__update_bins(pid)
+    finally:
+        os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
 
 # Multiple components can update everytime interval gets fired.
 @app.callback(Output('live-update-graph', 'figure'),
@@ -91,13 +109,23 @@ def update_graph_live(n):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
+        "--pid",
+        dest='pid',
+        nargs='?',
+        default='0')
+    parser.add_argument(
         "--port",
         dest='port',
         nargs='?',
         default=8050)
     args = parser.parse_args()
 
-    t = threading.Thread(target=update_bins)
-    t.daemon = True
-    t.start()
-    app.run_server(debug=False, port=args.port)
+    try:
+        t = threading.Thread(target=update_bins, args={args.pid})
+        t.start()
+        app.run_server(debug=False, port=args.port)
+    finally:
+        if proc != None:
+	    proc.kill()
+            os.killpg(os.getpgid(proc.pid), signal.SIGTERM)
+	    proc.wait()
