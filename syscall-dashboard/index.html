@@ -1,0 +1,20 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"
+"http://www.w3.org/TR/html4/frameset.dtd">
+<HTML>
+<HEAD>
+<TITLE>A frameset document</TITLE>
+ <script>
+      var ws = new WebSocket('ws://localhost:8888/ws');
+</script>
+</HEAD>
+<FRAMESET COLS="*,*">
+	<FRAMESET rows="40%,60%">
+		<FRAME name="fixed" src="http://172.17.0.2:8081/">
+		<FRAME name="dynamic" src="http://127.0.0.1:8050/">
+	 </FRAMESET>
+	<FRAMESET rows="40%,60%">
+		<FRAME name="fixed" src="http://localhost:8081/">
+		<FRAME name="dynamic" src="http://127.0.0.1:8051/">
+	 </FRAMESET>
+ </FRAMESET>
+</HTML>
