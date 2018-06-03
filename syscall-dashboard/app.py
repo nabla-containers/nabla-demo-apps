@@ -21,13 +21,18 @@ class SocketHandler(websocket.WebSocketHandler):
 
     def open(self):
         if self not in cl:
-            #dashNabla = pexpect.spawn('sysdig proc.name=ukvm-bin -c countsc | python dash_histo.py --port 8050')
-            logs = open('out-file.txt', 'w')
-            cmd = "stdbuf --output=0 sysdig proc.name=ukvm-bin -c countsc | python dash_histo.py --port 8050"
-            #ps = subprocess.Popen(cmd,shell=True,stdout=logs,stderr=logs, preexec_fn=os.setsid)
-            #ps = pexpect.popen_spawn.PopenSpawn(cmd, logfile=logs, preexec_fn=os.setsid)
-            ps = pexpect.spawn('/bin/bash', ['-c', cmd])
-            ps.expect("Running on http")
+            cmd_dashNabla = "stdbuf --output=0 sysdig proc.pid=29676 -c countsc | python dash_histo.py --port 8050"
+
+
+            ps_nabla = pexpect.spawn('/bin/bash', ['-c', cmd_dashNabla], timeout=None)
+            fout = open('mylog.txt','wb')
+            ps_nabla.logfile = fout
+            ps_nabla.expect("Running on http")
+
+            cmd_dashProc = "stdbuf --output=0 sysdig proc.name=node -c countsc | python dash_histo.py --port 8051"
+            ps_proc = pexpect.spawn('/bin/bash', ['-c', cmd_dashProc], timeout=None)
+            ps_proc.expect("Running on http")
+
             data = {
                 'replNabla':'http://172.17.0.2:8081/',
                 'replProc':'http://localhost:8081/',
@@ -36,7 +41,7 @@ class SocketHandler(websocket.WebSocketHandler):
             data_json = json.dumps(data)
             self.write_message(data_json)
             cl.append(self)
-            procs[self] = ps
+            procs[self] = (ps_nabla, ps_proc)
             print('new connection')
             print(procs[self])
 
@@ -44,10 +49,10 @@ class SocketHandler(websocket.WebSocketHandler):
         if self in cl:
             print('closed connection')
             cl.remove(self)
-            ps = procs[self]
+            ps_nabla, ps_proc = procs[self]
             print(procs[self])
-            #os.killpg(os.getpgid(ps.pid), signal.SIGTERM)  # Send the signal to all the process groups
-            os.killpg(os.getpgid(ps.pid), signal.SIGTERM)  # Send the signal to all the process groups
+            os.killpg(os.getpgid(ps_nabla.pid), signal.SIGTERM)  # Send the signal to all the process groups
+            os.killpg(os.getpgid(ps_proc.pid), signal.SIGTERM)  # Send the signal to all the process groups
 
 app = web.Application([
     (r'/', IndexHandler),
@@ -59,5 +64,6 @@ if __name__ == '__main__':
     try:
             ioloop.IOLoop.instance().start()
     finally:
-            for ps in procs.values():
-                    os.killpg(os.getpgid(ps.pid), signal.SIGTERM)  # Send the signal to all the process groups
+            for (ps_nabla, ps_proc) in procs.values():
+                    os.killpg(os.getpgid(ps_nabla.pid), signal.SIGTERM)  # Send the signal to all the process groups
+                    os.killpg(os.getpgid(ps_proc.pid), signal.SIGTERM)  # Send the signal to all the process groups
