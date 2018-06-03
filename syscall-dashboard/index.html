@@ -5,16 +5,22 @@
 <TITLE>A frameset document</TITLE>
  <SCRIPT>
       var ws = new WebSocket('ws://localhost:8888/ws');
+      ws.onmessage = function (event) {
+	        console.log(event.data);
+		document.getElementById('dashProc').src = event.data;
+      }
 </SCRIPT>
+
 </HEAD>
+
 <FRAMESET COLS="*,*">
 	<FRAMESET rows="40%,60%">
-		<FRAME name="fixed" src="http://172.17.0.2:8081/">
-		<FRAME name="dynamic" src="http://127.0.0.1:8050/">
+		<FRAME name="replNabla" id="replNabla" src="http://172.17.0.2:8081/">
+		<FRAME name="replProc" id="replProc" src="http://127.0.0.1:8050/">
 	 </FRAMESET>
 	<FRAMESET rows="40%,60%">
-		<FRAME name="fixed" src="http://localhost:8081/">
-		<FRAME name="dynamic" src="http://127.0.0.1:8051/">
+		<FRAME name="dashNabla" id="dashNabla" src="http://localhost:8081/">
+		<FRAME name="dashProc" id="dashProc" src="http://127.0.0.1:8051/">
 	 </FRAMESET>
  </FRAMESET>
 </HTML>

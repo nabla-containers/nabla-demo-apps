@@ -16,6 +16,7 @@ class SocketHandler(websocket.WebSocketHandler):
         if self not in cl:
             print 'new connection'
             cl.append(self)
+	    self.write_message('http://172.17.0.2:8081/')
 
     def on_close(self):
         if self in cl:
