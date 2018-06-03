@@ -3,6 +3,8 @@ import json
 
 cl = []
 
+procs = {}
+
 class IndexHandler(web.RequestHandler):
     def get(self):
         self.render("index.html")
@@ -16,12 +18,20 @@ class SocketHandler(websocket.WebSocketHandler):
         if self not in cl:
             print 'new connection'
             cl.append(self)
-	    self.write_message('http://172.17.0.2:8081/')
+	    data = {
+		'replNabla':'http://172.17.0.2:8081/',
+		'replProc':'http://localhost:8081/',
+		'dashNabla':'http://localhost:8050/',
+		'dashProc':'http://localhost:8051/'}
+	    data_json = json.dumps(data)
+	    self.write_message(data_json)
+	    procs[self] = "user 1"
 
     def on_close(self):
         if self in cl:
             print 'closed connection'
             cl.remove(self)
+	    print procs[self]
 
 app = web.Application([
     (r'/', IndexHandler),
