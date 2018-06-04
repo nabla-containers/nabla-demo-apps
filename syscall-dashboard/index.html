@@ -2,7 +2,7 @@
 "http://www.w3.org/TR/html4/frameset.dtd">
 <HTML>
 <HEAD>
-<TITLE>A frameset document</TITLE>
+<TITLE>Nabla containers syscall count</TITLE>
  <SCRIPT>
       var ws = new WebSocket('ws://localhost:8888/ws');
       ws.onmessage = function (event) {
@@ -13,6 +13,14 @@
 		document.getElementById('dashNabla').src = obj.dashNabla;
 		document.getElementById('dashProc').src = obj.dashProc;
       }
+      ws.onclose = function (event) {
+	        console.log("closing");
+      }
+var keepalive_timer;
+function keep_connection_alive() {
+	        keepalive_timer = setTimeout('keep_connection_alive()', 55000);
+}
+keep_connection_alive();
 </SCRIPT>
 
 </HEAD>

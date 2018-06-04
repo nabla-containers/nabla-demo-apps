@@ -57,7 +57,8 @@ def __update_bins(pid):
     global proc
 
     #cmd_dashNabla = "stdbuf --output=0 --input=0 sysdig proc.pid=%d -c countsc" % pid
-    cmd_dashNabla = "stdbuf --output=0 --input=0 sysdig proc.name=%s -c countsc" % pid
+    #cmd_dashNabla = "stdbuf --output=0 --input=0 sysdig proc.name=%s -c countsc" % pid
+    cmd_dashNabla = "stdbuf --output=0 sysdig proc.name=%s -c countsc" % pid
     #cmd_dashNabla = "stdbuf --output=0 sysdig proc.name=ukvm-bin -c countsc"
     proc = subprocess.Popen(cmd_dashNabla, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env={'PYTHONUNBUFFERED': '1'})
 
