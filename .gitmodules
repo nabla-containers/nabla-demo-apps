@@ -1,0 +1,3 @@
+[submodule "authservice-node"]
+	path = authservice-node
+	url = git@github.ibm.com:kollerr/authservice-node.git
