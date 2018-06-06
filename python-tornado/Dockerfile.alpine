@@ -1,0 +1,6 @@
+FROM kollerr/nabla-python3-base:alpine
+
+# Only /usr/local is mounted so we have to add tornado_main.py in there.
+# That's coming from the base (kollerr/nabla-python3-base:alpine).
+ADD tornado_main.py /usr/local/tornado_main.py
+RUN pip install tornado==4.5.3 six perf
