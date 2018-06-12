@@ -1,0 +1,3 @@
+FROM nabla-redis-base
+
+COPY redis.conf /data/conf/redis.conf
