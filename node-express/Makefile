@@ -15,18 +15,6 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-build_docker.alpine: Dockerfile.alpine app
-	sudo docker build -f Dockerfile.alpine -t kollerr/nabla-node-webrepl:alpine .
-
-run_docker.alpine:
-	sudo docker run --rm -it --expose=8081 --cap-add=NET_ADMIN \
-		kollerr/nabla-node-webrepl:alpine \
-		--volume app:/app /app/app.js
-
-run_docker.rootfs:
-	# XXX: hack used to have a /dev/urandom inside of the unikernel
-	dd if=/dev/random of=/tmp/urandom count=1 bs=1024
-	sudo docker run --rm -it --expose=8081 --cap-add=NET_ADMIN \
-		-v /tmp/urandom:/home/node/dev/urandom \
-		kollerr/nabla-node-webrepl:alpine \
-		--volume /home/node/:/ /app/app.js
+all:
+	sudo docker build -t node-express-nabla -f Dockerfile.nabla .
+	sudo docker build -t node-express -f Dockerfile .
