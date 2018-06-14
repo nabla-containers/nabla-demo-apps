@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ip": "^1.1.5",
     "request": "^2.87.0",
     "webrepl": "https://github.com/ricarkol/webrepl.git"
   }
