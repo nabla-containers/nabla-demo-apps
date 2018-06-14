@@ -1,5 +1,3 @@
-process.chdir(__dirname)
-
 var ip = require("ip");
 
 var webrepl = require('webrepl');
