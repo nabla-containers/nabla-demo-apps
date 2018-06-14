@@ -15,22 +15,6 @@
 # TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-build_docker.alpine: Dockerfile.alpine
-	sudo docker build -f Dockerfile.alpine -t kollerr/nabla-python3-tornado:alpine .
-
-run_docker.alpine:
-	sudo docker run --rm -it --expose=5000 --cap-add=NET_ADMIN \
-		kollerr/nabla-python3-tornado:alpine \
-		--env PYTHONHOME=/python -- /python/tornado_main.py
-
-run_docker.rootfs:
-	# XXX: hack used to have a /dev/urandom inside of the unikernel
-	dd if=/dev/random of=/tmp/urandom count=1024 bs=1024
-	# We use this `--volume /usr:/`, so our hacky /dev/urandom
-	# has to be at /usr/dev/urandom
-	sudo docker run --rm -it --expose=5000 --cap-add=NET_ADMIN \
-		-v /tmp/urandom:/usr/dev/urandom \
-		-v $(CURDIR)/rootfs/etc:/usr/etc \
-		kollerr/nabla-python3-tornado:alpine \
-		--env PYTHONHOME=/local \
-		--volume /usr:/ -- /local/tornado_main.py
+all: Dockerfile Dockerfile.nabla Makefile tornado_main.py
+	sudo docker build -t python-tornado-nabla -f Dockerfile.nabla .
+	sudo docker build -t python-tornado -f Dockerfile .
