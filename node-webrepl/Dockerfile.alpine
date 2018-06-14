@@ -1,6 +1,0 @@
-FROM kollerr/nabla-node-base:alpine
-
-WORKDIR /home/node
-ADD app/app.js app/app.js
-ADD app/package.json app/package.json
-RUN (cd app; npm install)
