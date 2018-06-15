@@ -54,7 +54,7 @@ example:
 * `redis-test`: runs a Redis key/value store.  Access it on port 6379
   using e.g. the Redis CLI (you should see OK):
 
-    redis-cli -h 172.17.0.2 -p 6379 set foo bar
+      redis-cli -h 172.17.0.2 -p 6379 set foo bar
 
 
 ### See Also
