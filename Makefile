@@ -25,3 +25,21 @@ world:
 	make -C node-webrepl
 	make -C python-tornado
 	make -C redis-test
+
+publish: world
+	sudo docker tag node-express-nabla nablact/node-express-nabla
+	sudo docker tag node-express-legacy nablact/node-express-legacy
+	sudo docker tag node-webrepl-nabla nablact/node-webrepl-nabla
+	sudo docker tag node-webrepl-legacy nablact/node-webrepl-legacy
+	sudo docker tag python-tornado-nabla nablact/python-tornado-nabla
+	sudo docker tag python-tornado-legacy nablact/python-tornado-legacy
+	sudo docker tag redis-test-nabla nablact/redis-test-nabla
+	sudo docker tag redis-test-legacy nablact/redis-test-legacy
+	sudo docker push nablact/node-express-nabla
+	sudo docker push nablact/node-express-legacy
+	sudo docker push nablact/node-webrepl-nabla
+	sudo docker push nablact/node-webrepl-legacy
+	sudo docker push nablact/python-tornado-nabla
+	sudo docker push nablact/python-tornado-legacy
+	sudo docker push nablact/redis-test-nabla
+	sudo docker push nablact/redis-test-legacy
