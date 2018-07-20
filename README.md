@@ -16,12 +16,12 @@ application (for comparison purposes).  For example, to build the
 ### Running the Containers
 
 The `Makefile` will produce two container images, named after the
-directory (the test application name) with and without "-nabla"
+directory (the test application name) with "-nabla" or "-legacy"
 appended to the end.  To run the applications, use Docker (you must
 have installed [`runnc`](https://github.com/nabla-containers/runnc)
 for the nabla case).  For example:
 
-    docker run --rm node-express
+    docker run --rm node-express-legacy
     docker run --rm --runtime=runnc node-express-nabla
 
 ### Modifying Dockerfiles
@@ -43,15 +43,15 @@ example:
 
 ### Information about the demo applications
 
-* `node-express[-nabla]`: runs a node express web server.  Access it on port
+* `node-express-nabla` and `node-express-legacy`: runs a node express web server.  Access it on port
   8080; you should receive a text string "Nabla!".
 
-* `node-webrepl[-nabla]`: runs a webrepl in node.  Access it on port 8081.
+* `node-webrepl-naba` and `node-webrepl-legacy`: runs a webrepl in node.  Access it on port 8081.
 
-* `python-tornado[-nabla]`: runs a Python tornado web server.  Access it on
+* `python-tornado-nabla` and `python-tornado-legacy`: runs a Python tornado web server.  Access it on
   port 5000, you should see some `x`s.
 
-* `redis-test[-nabla]`: runs a Redis key/value store.  Access it on port 6379
+* `redis-test-nabla` and `redis-test-legacy`: runs a Redis key/value store.  Access it on port 6379
   using e.g. the Redis CLI (you should see OK):
 
       redis-cli -h 172.17.0.2 -p 6379 set foo bar
