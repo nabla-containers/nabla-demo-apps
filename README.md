@@ -21,8 +21,8 @@ appended to the end.  To run the applications, use Docker (you must
 have installed [`runnc`](https://github.com/nabla-containers/runnc)
 for the nabla case).  For example:
 
-    docker run --rm node-express-legacy
-    docker run --rm --runtime=runnc node-express-nabla
+    docker run --rm -it node-express-legacy
+    docker run --rm -it --runtime=runnc node-express-nabla
 
 ### Modifying Dockerfiles
 
