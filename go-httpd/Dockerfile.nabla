@@ -1,0 +1,12 @@
+FROM nabla-go-base
+
+COPY src/ /goapp/
+WORKDIR "/goapp"
+
+RUN go get -d ./...
+RUN make -f Makefile.goapp
+
+FROM scratch
+COPY --from=0 /goapp/goapp.seccomp /
+ENTRYPOINT ["/goapp.seccomp"]
+
