@@ -1,3 +1,4 @@
 FROM nabla-redis-base
 
 COPY redis.conf /data/conf/redis.conf
+CMD ["/data/conf/redis.conf"]
