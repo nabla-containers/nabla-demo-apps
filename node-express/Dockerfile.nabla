@@ -7,6 +7,6 @@ RUN (cd app; npm install)
 
 # The first step gets all the modules
 
-FROM nabla-node-base
+FROM nablact/nabla-node-base
 COPY --from=0 /home/node/app/ /home/node/app/
 CMD ["/home/node/app/app.js"]

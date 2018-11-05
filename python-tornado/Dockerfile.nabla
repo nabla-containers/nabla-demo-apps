@@ -5,7 +5,7 @@ RUN pip install tornado==4.5.3 six perf
 
 # First stage installs dependencies
 
-FROM nabla-python3-base
+FROM nablact/nabla-python3-base
 
 # nabla-python3-base has a PYTHONHOME of /usr/local
 

@@ -1,4 +1,4 @@
-FROM nabla-redis-base
+FROM nablact/nabla-redis-base
 
 COPY redis.conf /data/conf/redis.conf
 CMD ["/data/conf/redis.conf"]
