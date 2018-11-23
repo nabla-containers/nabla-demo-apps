@@ -1,10 +1,10 @@
 package main
 
 import (
+	"./helper"
 	"C"
 	"fmt"
 	"net/http"
-	"./helper"
 )
 
 func reqHandler(w http.ResponseWriter, r *http.Request) {
@@ -18,7 +18,7 @@ func main() {
 }
 
 func httpd() {
-	fmt.Println("You can now call `wget <ip>:3000' now")
+	fmt.Println("You can now call `curl <ip>:3000' now")
 	http.HandleFunc("/", reqHandler)
 	http.ListenAndServe(":3000", nil)
 }
