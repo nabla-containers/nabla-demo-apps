@@ -14,8 +14,6 @@
 # NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 # CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-all: Dockerfile.nabla Makefile src/*
+all: Dockerfile.nabla Makefile src/* Dockerfile.legacy
 	sudo docker build -t go-httpd-nabla -f Dockerfile.nabla .
-
-run:
-	docker run -it --rm --runtime=runnc go-httpd-nabla arg1 2 3 4
+	sudo docker build -t go-httpd-legacy -f Dockerfile.legacy .
