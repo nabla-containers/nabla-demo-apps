@@ -1,4 +1,4 @@
-FROM nablact/nabla-go-base:v0.2
+FROM nablact/nabla-go-base:v0.3
 
 COPY src/ /goapp/
 WORKDIR /goapp
